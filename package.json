@@ -1,0 +1,22 @@
+{
+  "name": "instagram",
+  "version": "1.0.0",
+  "description": "creating instagram using mern stack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index",
+    "start": "run index.js",
+    "heroku-postbuild": "NPM_CONFIG-PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+  },
+  "author": "Gunjan Mistry",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.13"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
+}

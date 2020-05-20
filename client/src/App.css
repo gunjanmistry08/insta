@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap');
+
+* {
+    user-select: none;
+}
+
+h1,h2,h2,h4,h5,h6{
+    margin: 5px;
+}
+
+.instagram {
+    font-family: 'Grand Hotel', cursive;
+    background: -webkit-linear-gradient(#F58529, #FEDA77, #DD2A7B, #8134AF, #515BD4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* #F58529 #FEDA77  #DD2A7B  #8134AF #515BD4*/
+}
+
+.brand-logo {
+    padding-left: 10px !important;
+}
+
+.card {
+    width: 400px;
+    padding: 20px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card-image {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.card-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* line-height: 0.7px; */
+}
+
+.card-content  .comments{
+    width: 90%;
+    display: flex;
+    flex: 1;
+    justify-content: flex-start;
+}
+
+.comments h6{
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center; 
+    /* margin-left: auto; */
+}
+.comments h6 * {
+    margin: 0px 5px;
+}
+
+.comments h6 i {
+    margin-left: auto;
+
+}
+.card .btn {
+    margin: 20px;
+}
+
+ input:focus {
+    border-bottom: 1px solid lightblue !important;
+    box-shadow: 0 1px 0 0 lightblue !important;
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.gallery * {
+    margin:10px 10px ;
+}
+
+p {
+    margin: 0;
+}
+
+.profile-info {
+    width: 100%;
+    display: flex;
+    flex: 2;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-around;
+    margin: 18px;
+    border-bottom: 1px solid grey;
+}
+
+#toast-container {
+    top:60px;
+}
