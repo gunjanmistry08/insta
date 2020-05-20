@@ -12,14 +12,6 @@ const { JWT_SECRET } = require("../config/key")
 
 const loginmiddleware = require("../middleware/loginmiddleware")
 
-router.get('/protected', loginmiddleware, (req, res) => {
-    res.send("Hello User")
-})
-
-router.get('/', (req, res) => {
-    res.send('Hello')
-})
-
 router.post('/signup', (req, res) => {
     const { name, email, password } = req.body
     if (!email || !password || !name) {
