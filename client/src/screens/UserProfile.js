@@ -79,7 +79,7 @@ export default function UserProfile() {
                 })
                 setShowFollow(true)
 
-            })
+            }) 
     }
 
     return (
@@ -92,7 +92,7 @@ export default function UserProfile() {
                             <div>
                                 <img
                                     style={{ width: "160px", height: "160px", borderRadius: "80px" }}
-                                    src={state ? state.pic : "loading"}
+                                    src={result ? result.user.pic : "loading"}
                                     alt='profile'
                                 />
                             </div>
