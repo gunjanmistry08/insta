@@ -40,7 +40,7 @@ export default function Signup() {
                 <input type='text' placeholder='Name' value={name} onChange={(e) => setname(e.target.value)} />
                 <input type='text' placeholder='Email..' value={email} onChange={(e) => setemail(e.target.value)} />
                 <input type='password' placeholder='Password' value={password} onChange={(e) => setpassword(e.target.value)} />
-                <button className='btn waves-effect waves-light black'onClick={() => SignupHandler()}>Sign Up</button>
+                <button className='btn waves-effect waves-light'onClick={() => SignupHandler()}>Sign Up</button>
             </div>
         </div>
     )

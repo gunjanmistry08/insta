@@ -84,4 +84,12 @@ router.put('/updatepic', loginmiddleware, (req, res) => {
         })
 })
 
+router.post('/searchuser', loginmiddleware, (req, res) => {
+    let userpattern = new RegExp("^" + req.body.query)
+    User.find({name:{$regex:userpattern}})
+    .select('_id name')
+    .then(users => res.json(users))
+    .catch(error => console.error(error))
+})
+
 module.exports = router

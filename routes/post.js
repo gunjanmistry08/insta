@@ -10,6 +10,7 @@ router.get('/allpost', loginmiddleware, (req, res) => {
     Post.find()
         .populate("postedBy", "_id name")
         .populate("comments.postedBy","_id name")
+        .sort('-createdAt')
         .then(posts => res.json({ posts }))
         .catch(error => console.log(error))
 })
@@ -18,6 +19,7 @@ router.get('/followingpost', loginmiddleware, (req, res) => {
     Post.find({postedBy:{$in : req.user.following}})
         .populate("postedBy", "_id name")
         .populate("comments.postedBy","_id name")
+        .sort('-createdAt')
         .then(posts => res.json({ posts }))
         .catch(error => console.log(error))
 })
@@ -25,6 +27,7 @@ router.get('/followingpost', loginmiddleware, (req, res) => {
 router.get('/mypost', loginmiddleware, (req, res) => {
     Post.find({ postedBy: req.user._id })
         .populate("postedBy", "_id name")
+        .sort('-createdAt')
         .then(posts => res.json({ posts }))
         .catch(error => console.log(error))
 })

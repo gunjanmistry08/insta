@@ -42,7 +42,7 @@ export default function Login() {
                 <h2 className='instagram'>Instagram</h2>
                 <input type='text' placeholder='Email..' onChange={(e) => setemail(e.target.value)} value={email} />
                 <input type='password' placeholder='Password' onChange={(e) => setpassword(e.target.value)} value={password} />
-                <button className='btn waves-effect waves-light black ' onClick={()=>LoginHandler()}>Login</button>
+                <button className='btn waves-effect waves-light ' onClick={()=>LoginHandler()}>Login</button>
             </div>
         </div>
     )

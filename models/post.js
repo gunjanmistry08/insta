@@ -28,6 +28,6 @@ const PostScheme = mongoose.Schema({
             ref: "User"
         }
     }]
-})
+},{timestamps:true})
 
 mongoose.model("Post", PostScheme)

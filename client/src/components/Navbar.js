@@ -1,17 +1,25 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef, useEffect, useState } from 'react';
 import { Link, useHistory } from "react-router-dom";
+import M from "materialize-css";
 import { Usercontext } from '../App';
 
 const Navbar = () => {
 
     const history = useHistory()
+    const searchmodal = useRef(null)
     const { state, dispatch } = useContext(Usercontext)
+    const [search, setsearch] = useState('')
+    const [users, setusers] = useState([])
+    useEffect(() => {
+        M.Modal.init(searchmodal.current)
+    }, [])
     const RenderList = () => {
         if (state) {
             return [
+                <li key={'search'}><i className='large material-icons modal-trigger' data-target='modal1' style={{ color: 'black' }}> search</i></li>,
                 <li key={'explore'} >
                     <Link to='/explore' >
-                        <i className='small material-icons' style={{color:'black'}} >search</i>
+                        <i className='large material-icons' style={{ color: 'red' }} >whatshot</i>
                     </Link>
                 </li>,
                 <li key={'profile'} >
@@ -20,7 +28,7 @@ const Navbar = () => {
                     </Link>
                 </li>,
                 <li key={'logout'} >
-                    <button className='btn waves-effect waves-light' style={{background:'linear-gradient(to right bottom,#F58529, #DD2A7B, #8134AF, #515BD4)'}} onClick={() => {
+                    <button className='btn waves-effect waves-light' style={{ background: 'linear-gradient(to right bottom,#F58529, #DD2A7B, #8134AF, #515BD4)' }} onClick={() => {
                         localStorage.clear()
                         dispatch({ type: "CLEAR" })
                         history.push('/login')
@@ -36,6 +44,24 @@ const Navbar = () => {
         }
     }
 
+    const SearchUser = (name) => {
+        setsearch(name)
+        fetch('/searchuser', {
+            method: 'post',
+            headers: {
+                'Authorization': "Bearer " + localStorage.getItem('jwt'),
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                query: name
+            })
+        }).then(res => res.json())
+            .then(results => {
+                console.log(results)
+                setusers(results)
+            })
+    }
+
     return (
         <div>
             <nav>
@@ -46,7 +72,34 @@ const Navbar = () => {
                     </ul>
                 </div>
             </nav>
+            <div id="modal1" className="modal" ref={searchmodal}>
+                <div className="modal-content">
+                    <h4>Search</h4>
+                    <input type='text' placeholder='Search username' value={search} onChange={(e) => SearchUser(e.target.value)} />
+                    <ul className="collection">
+                        {
+                            users.map(user => {
+                                return (
+                                    <Link to={state._id === user._id ? "/profile": "/profile/"+user._id } >
+                                        <li className='collection-item modal-close' onClick={() => {
+                                            setsearch('')
+                                            setusers([])
+                                        }}>{user.name}</li>
+                                    </Link>
+                                )
+                            })
+                        }
+                    </ul>
+                </div>
+                <div className="modal-footer">
+                    <button className="modal-close waves-effect waves-light btn-flat" onClick={() => {
+                        setsearch('');
+                        setusers([]);
+                    }} >Agree</button>
+                </div>
+            </div>
         </div>
+
     )
 }
 

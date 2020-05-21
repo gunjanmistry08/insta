@@ -70,8 +70,16 @@ h1,h2,h2,h4,h5,h6{
 }
 
  input:focus {
-    border-bottom: 1px solid lightblue !important;
-    box-shadow: 0 1px 0 0 lightblue !important;
+    border-bottom: 1px solid #8134AF !important;
+    box-shadow: 0 1px 0 0 #8134AF !important;
+}
+
+button, .btn {
+    background-color: #8134AF;
+}
+
+button:hover, .btn:hover {
+    background-color: #DD2A7B;
 }
 
 .gallery {
