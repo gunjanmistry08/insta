@@ -8,9 +8,12 @@ const User = mongoose.model("User")
 router.get('/user/:id', (req, res) => {
     User.findOne({ _id: req.params.id })
         .select('-password')
+        .populate("followers", "_id name pic")
+        .populate("following", "_id name pic")
         .then(user => {
             Post.find({ postedBy: req.params.id })
                 .populate("postedby", "_id name")
+                .populate("comments.postedBy", "id name pic")
                 .exec((error, posts) => {
                     if (error) {
                         return res.status(422).json({ error })
@@ -50,7 +53,7 @@ router.delete('/deleteuser/:id', loginmiddleware, (req, res) => {
                 .catch(error => {
                     return res.status(422).json(error)
                 })
-                user.remove()
+            user.remove()
         })
 })
 
@@ -86,10 +89,10 @@ router.put('/updatepic', loginmiddleware, (req, res) => {
 
 router.post('/searchuser', loginmiddleware, (req, res) => {
     let userpattern = new RegExp("^" + req.body.query)
-    User.find({name:{$regex:userpattern}})
-    .select('_id name')
-    .then(users => res.json(users))
-    .catch(error => console.error(error))
+    User.find({ name: { $regex: userpattern } })
+        .select('_id name')
+        .then(users => res.json(users))
+        .catch(error => console.error(error))
 })
 
 module.exports = router

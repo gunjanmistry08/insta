@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Usercontext } from "../App";
 import { useParams } from 'react-router-dom';
 
-
 export default function UserProfile() {
 
     const [data, setdata] = useState()
@@ -17,11 +16,10 @@ export default function UserProfile() {
             }
         }).then(res => res.json())
             .then(result => {
-                // console.log(result);
+                console.log(result);
                 setdata(result)
             })
     }, [])
-
 
     const FollowUser = (followId) => {
         fetch('/follow', {
@@ -160,43 +158,6 @@ export default function UserProfile() {
             .catch(error => console.error(error))
     }
 
-    const DeletePost = (postId) => {
-        fetch(`/deletepost/${postId}`, {
-            method: 'delete',
-            headers: {
-                'Authorization': "Bearer " + localStorage.getItem("jwt")
-            }
-        }).then(res => res.json())
-            .then(result => {
-                // console.log(result)
-                const NewData = data.filter(post => post._id != postId)
-                setdata(NewData)
-            })
-            .catch(error => console.error(error))
-    }
-
-    const DeleteComment = (postId, commentId) => {
-        fetch(`/deletecomment/${postId}/${commentId}`, {
-            method: 'put',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('jwt'),
-                'Content-Type': 'application/json'
-            }
-        }).then(res => res.json())
-            .then(result => {
-                const NewData = data.map(item => {
-                    if (item._id === result._id) {
-                        return result
-                    } else {
-                        return item
-                    }
-                })
-                setdata(NewData)
-
-            })
-            .catch(error => console.error(error))
-    }
-
     return (
         <>
             {
@@ -226,11 +187,23 @@ export default function UserProfile() {
                                         <strong>{data.user.following.length}</strong>
                                         <p>following</p>
                                     </div>
+                                    { window.innerWidth >= 460 ?
+                                    <div>
                                     {
                                         showfollow
-                                        ? <button className='btn waves-effect waves-light blue darken 1 white-text' style={{margin:'10px'}}  onClick={() => FollowUser(data.user._id)}>Follow</button>
+                                        ? <button className='btn waves-effect waves-light blue darken-1 white-text' style={{margin:'10px'}}  onClick={() => FollowUser(data.user._id)}>Follow</button>
                                         : <button className='btn waves-effect waves-light white red-text'  style={{margin:'10px'}} onClick={() => UnfollowUser(data.user._id)}>Unfollow</button>
                                     }
+                                    </div> :
+                                    <div>
+                                       {
+                                        showfollow
+                                        ? <button className='btn waves-effect waves-light blue darken-1 white-text' style={{margin:'10px'}}  onClick={() => FollowUser(data.user._id)}><i className='material-icons'>person_add</i></button>
+                                        : <button className='btn waves-effect waves-light white red-text'  style={{margin:'10px'}} onClick={() => UnfollowUser(data.user._id)}><i className='material-icons'>person</i></button>
+                                    } 
+                                    </div>
+                                    }
+                                    
                                 </div>
                             </div>
                         </div>
@@ -259,9 +232,6 @@ export default function UserProfile() {
                                                 <img style={{ width: '50px', height: '50px', borderRadius: '25px' }} src={comment.postedBy.pic} alt='profile' />
                                                 <strong>{comment.postedBy.name} </strong>
                                                 {comment.text}
-                                                {
-                                                    post.postedBy._id == state._id && <i className='tiny material-icons' onClick={() => DeleteComment(post._id, comment._id)}>close</i>
-                                                }
                                             </h6>
                                         </div>
                                     )
