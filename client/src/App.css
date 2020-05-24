@@ -110,6 +110,7 @@ p {
 }
 
 .profile-header {
+    width: 100vw;
     display: flex;
     justify-content: space-around;
     margin: 18px;

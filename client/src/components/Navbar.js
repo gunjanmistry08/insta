@@ -26,14 +26,6 @@ const Navbar = () => {
                     <Link to="/profile" style={{ maxHeight: '50px' }}>
                         <img style={{ width: '50px', height: '50px', borderRadius: '25px' }} src={state ? state.pic : "loading"} alt='profile' />
                     </Link>
-                </li>,
-                <li key={'logout'} >
-                    <button className='btn waves-effect waves-light' style={{ background: 'linear-gradient(to right bottom,#F58529, #DD2A7B, #8134AF, #515BD4)' }} onClick={() => {
-                        localStorage.clear()
-                        dispatch({ type: "CLEAR" })
-                        history.push('/login')
-
-                    }} >Logout</button>
                 </li>
             ]
         } else {
@@ -95,7 +87,7 @@ const Navbar = () => {
                     <button className="modal-close waves-effect waves-light btn-flat" onClick={() => {
                         setsearch('');
                         setusers([]);
-                    }} >Agree</button>
+                    }} >Close</button>
                 </div>
             </div>
         </div>

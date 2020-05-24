@@ -5,11 +5,9 @@ const loginmiddleware = require('../middleware/loginmiddleware')
 const Post = mongoose.model("Post")
 const User = mongoose.model("User")
 
-router.get('/user/:id', (req, res) => {
+router.get('/user/:id', loginmiddleware, (req, res) => {
     User.findOne({ _id: req.params.id })
         .select('-password')
-        .populate("followers", "_id name pic")
-        .populate("following", "_id name pic")
         .then(user => {
             Post.find({ postedBy: req.params.id })
                 .populate("postedby", "_id name")
@@ -20,6 +18,21 @@ router.get('/user/:id', (req, res) => {
                     }
                     return res.json({ user, posts })
                 })
+        })
+})
+
+router.get('/userfollow', loginmiddleware, (req, res) => {
+    User.findById(req.user._id)
+        .select('-password -name -pic -email ')
+        .populate('followers', '_id name pic')
+        .populate('following', '_id name pic')
+        .then(user => {
+            // console.log(user)
+            return res.json(user)
+        })
+        .catch(error => {
+            console.error(error)
+            return res.json(error)
         })
 })
 

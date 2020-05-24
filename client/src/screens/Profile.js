@@ -1,16 +1,20 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef} from 'react';
 import CreatePost from '../components/createPost';
 import { Usercontext } from "../App";
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
+import M from 'materialize-css';
 
 export default function Profile() {
 
     const { state, dispatch } = useContext(Usercontext)
-    const [comment, setcomment] = useState('')
+    const [] = useState('')
     const [data, setdata] = useState('')
     const [posts, setposts] = useState([])
     const [image, setimage] = useState('')
     const histroy = useHistory()
+    const userfollow = useRef(null)
+    const [followers, setfollowers] = useState([])
+    const [following, setfollowing] = useState([])
 
     useEffect(() => {
         fetch('/mypost', {
@@ -23,6 +27,25 @@ export default function Profile() {
                 console.log(result.posts);
                 setposts(result.posts)
             })
+            .catch(error => console.error(error))
+
+        fetch('/userfollow', {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+            }
+
+        })
+            .then(res => res.json())
+            .then(result => {
+                // console.log(result)
+                setfollowers(result.followers)
+                setfollowing(result.following)
+                console.log(followers)
+                console.log(following)
+            })
+            .catch(error => console.error(error))
     }, [])
 
     useEffect(() => {
@@ -63,7 +86,9 @@ export default function Profile() {
         }
     }, [image])
 
-
+    useEffect(() => {
+        M.Modal.init(userfollow.current)
+    }, [])
 
     const updatePhoto = (file) => {
         setimage(file)
@@ -76,7 +101,7 @@ export default function Profile() {
                 'Authorization': 'Bearer ' + localStorage.getItem('jwt')
             }
         }).then(res => res.json())
-            .then(result => {
+            .then(() => {
                 // console.log(result)
                 dispatch({ type: 'CLEAR' })
                 localStorage.clear()
@@ -134,35 +159,6 @@ export default function Profile() {
             .catch(error => console.error(error))
     }
 
-
-    const MakeComment = (text, postId) => {
-        fetch('/comment', {
-            method: 'put',
-            headers: {
-                "Authorization": 'Bearer ' + localStorage.getItem('jwt'),
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                postId,
-                text
-            })
-        }).then(res => res.json())
-            .then(result => {
-                // console.log("result:",result)
-                const NewData = data.map(item => {
-                    if (item._id === result._id) {
-                        return result
-                    } else {
-                        return item
-                    }
-                })
-                setdata(NewData)
-                // console.log("data:",data)
-
-            })
-            .catch(error => console.error(error))
-    }
-
     const DeletePost = (postId) => {
         fetch(`/deletepost/${postId}`, {
             method: 'delete',
@@ -170,7 +166,7 @@ export default function Profile() {
                 'Authorization': "Bearer " + localStorage.getItem("jwt")
             }
         }).then(res => res.json())
-            .then(result => {
+            .then(() => {
                 // console.log(result)
                 const NewData = data.filter(post => post._id != postId)
                 setdata(NewData)
@@ -234,6 +230,56 @@ export default function Profile() {
                             <strong>{state ? state.following.length : 'loading'}</strong>
                             <p>following</p>
                         </div>
+                    <div className='btn waves-effect waves-light white black-text modal-trigger' style={{margin:'10px 0px'}} data-target='modal2'>
+                        <i className='material-icons'>group</i>
+                    </div>
+                    <button className='btn-small btn waves-effect waves-light' style={{margin:'10px 0px', background: 'linear-gradient(to right bottom,#F58529, #DD2A7B, #8134AF, #515BD4)' }} onClick={() => {
+                        localStorage.clear()
+                        dispatch({ type: "CLEAR" })
+                        histroy.push('/login')
+
+                    }}>Logout
+                        </button>
+                    </div>
+                    <div id="modal2" className="modal" ref={userfollow}>
+                        <div className="modal-content">
+                            <h4>Followers</h4>
+                            <div className='divider'></div>
+                            {
+                                followers.map(follower => {
+                                    return (
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', margin: '10px' }} key={follower._id}>
+                                            <img
+                                                style={{ width: "40px", height: "40px", borderRadius: "20px", marginRight: '50px' }}
+                                                src={follower ? follower.pic : "loading"}
+                                                alt='profile'
+                                            />
+                                            <Link to={'profile/' + follower._id} style={{ marginRight: 'auto' }}>{follower.name}</Link>
+                                        </div>
+                                    )
+                                })
+                            }
+                            <div className='divider'></div>
+                            <h4 style={{ marginTop: '10px' }}>Following</h4>
+                            <div className='divider'></div>
+                            {
+                                following.map(follow => {
+                                    return (
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', margin: '10px' }} key={follow._id} >
+                                            <img
+                                                style={{ width: "40px", height: "40px", borderRadius: "20px", marginRight: '50px' }}
+                                                src={follow ? follow.pic : "loading"}
+                                                alt='profile'
+                                            />
+                                            <Link to={'profile/' + follow._id} style={{ marginRight: 'auto' }}>{follow.name}</Link>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                        {/* <div className="modal-footer">
+                            <a href="#!" className="modal-close waves-effect waves-green btn-flat">Agree</a>
+                        </div> */}
                     </div>
                 </div>
             </div>

@@ -143,6 +143,4 @@ router.put('/deletecomment/:postId/:commentId', loginmiddleware, (req, res) => {
         })
 })
 
-
-
 module.exports = router
