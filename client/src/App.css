@@ -27,7 +27,7 @@ h1,h2,h2,h4,h5,h6{
 }
 
 .card {
-    width: 400px;
+    width: 60%;
     padding: 20px;
     margin: 20px auto;
     display: flex;
@@ -47,9 +47,27 @@ h1,h2,h2,h4,h5,h6{
     align-items: center;
     /* line-height: 0.7px; */
 }
+.card-content .comments::-webkit-scrollbar {
+    width: 10px;
+}
 
-.card-content  .comments{
-    width: 90%;
+.card-content .comments::-webkit-scrollbar-thumb {
+    width: 10px;
+    background: #DD2A7B; 
+    border-radius: 10px;
+}
+
+
+.card-content .comments {
+    max-height: 200px;
+    height: max-content;
+    width: 100%;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+  
+
+.card-content  .comment{
     display: flex;
     flex: 1;
     justify-content: flex-start;
