@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import M from "materialize-css";
+import { Helmet } from "react-helmet";
 
 export default function Signup() {
 
@@ -15,7 +16,7 @@ export default function Signup() {
             {
                 method: "post",
                 headers: {
-                    "Content-Type":"application/json"
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
                     name,
@@ -25,23 +26,28 @@ export default function Signup() {
             }).then(res => res.json())
             .then(data => {
                 if (data.error) {
-                    M.toast({html: data.error, classes:'red darken-2'})
+                    M.toast({ html: data.error, classes: 'red darken-2' })
                 } else {
-                    M.toast({html:'Account Created Successfully', classes:'green draken-2'})
+                    M.toast({ html: 'Account Created Successfully', classes: 'green draken-2' })
                     history.push('/login')
                 }
             })
     }
 
     return (
-        <div className='container'>
-            <div className='card' style={{width:'80%',margin:'100px auto' }} >
-                <h2 className='instagram'>Instagram</h2>
-                <input type='text' placeholder='Name' value={name} onChange={(e) => setname(e.target.value)} />
-                <input type='text' placeholder='Email..' value={email} onChange={(e) => setemail(e.target.value)} />
-                <input type='password' placeholder='Password' value={password} onChange={(e) => setpassword(e.target.value)} />
-                <button className='btn waves-effect waves-light'onClick={() => SignupHandler()}>Sign Up</button>
+        <>
+            <Helmet>
+                <title>Insta8 | Signup</title>
+            </Helmet>
+            <div className='container'>
+                <div className='card' style={{ width: '80%', margin: '100px auto' }} >
+                    <h2 className='instagram'>Instagram</h2>
+                    <input type='text' placeholder='Name' value={name} onChange={(e) => setname(e.target.value)} />
+                    <input type='text' placeholder='Email..' value={email} onChange={(e) => setemail(e.target.value)} />
+                    <input type='password' placeholder='Password' value={password} onChange={(e) => setpassword(e.target.value)} />
+                    <button className='btn waves-effect waves-light' onClick={() => SignupHandler()}>Sign Up</button>
+                </div>
             </div>
-        </div>
+        </>
     )
 }

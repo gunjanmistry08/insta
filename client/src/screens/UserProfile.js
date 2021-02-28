@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Usercontext } from "../App";
 import { useParams } from 'react-router-dom';
 import Post from '../components/Post';
+import { Helmet } from "react-helmet";
 
 export default function UserProfile() {
 
@@ -9,7 +10,7 @@ export default function UserProfile() {
     const [comment, setcomment] = useState('')
     const { state, dispatch } = useContext(Usercontext)
     const { userid } = useParams()
-    const [showfollow,setShowFollow] = useState(state? !state.following.includes(userid): true)
+    const [showfollow, setShowFollow] = useState(state ? !state.following.includes(userid) : true)
     useEffect(() => {
         fetch(`/user/${userid}`, {
             headers: {
@@ -35,21 +36,21 @@ export default function UserProfile() {
         }).then(res => res.json())
             .then(result => {
                 // console.log(result);
-                dispatch({type:'UPDATE',payload:{following:result.following,followers:result.followers}})
-                localStorage.setItem('user',JSON.stringify(data))
+                dispatch({ type: 'UPDATE', payload: { following: result.following, followers: result.followers } })
+                localStorage.setItem('user', JSON.stringify(data))
                 setdata((prev) => {
                     return {
                         ...prev,
-                        user:{
+                        user: {
                             ...prev.user,
-                            followers:[...prev.user.followers,result._id]
+                            followers: [...prev.user.followers, result._id]
                         }
                     }
                 })
                 setShowFollow(false)
             })
     }
-   
+
     const UnfollowUser = (unfollowId) => {
         fetch('/unfollow', {
             method: 'put',
@@ -63,30 +64,34 @@ export default function UserProfile() {
         }).then(res => res.json())
             .then(result => {
                 // console.log(result);
-                dispatch({type:"UPDATE",payload:{following:result.following,followers:result.followers}})
-                localStorage.setItem('user',JSON.stringify(result))
+                dispatch({ type: "UPDATE", payload: { following: result.following, followers: result.followers } })
+                localStorage.setItem('user', JSON.stringify(result))
 
                 setdata((prev) => {
-                    const newfollower = prev.user.followers.filter(item => item!= result._id)
+                    const newfollower = prev.user.followers.filter(item => item != result._id)
                     return {
                         ...prev,
-                        user:{
+                        user: {
                             ...prev.user,
-                            followers:newfollower
+                            followers: newfollower
                         }
                     }
                 })
                 setShowFollow(true)
 
-            }) 
+            })
     }
 
     return (
         <>
+
             {
                 data
                     ?
                     <div>
+                        <Helmet>
+                            <title>{data.user.name}</title>
+                        </Helmet>
                         <div className='profile-header'>
                             <div>
                                 <img
@@ -110,23 +115,23 @@ export default function UserProfile() {
                                         <strong>{data.user.following.length}</strong>
                                         <p>following</p>
                                     </div>
-                                    { window.innerWidth >= 460 ?
-                                    <div>
-                                    {
-                                        showfollow
-                                        ? <button className='btn waves-effect waves-light blue darken-1 white-text' style={{margin:'10px'}}  onClick={() => FollowUser(data.user._id)}>Follow</button>
-                                        : <button className='btn waves-effect waves-light white red-text'  style={{margin:'10px'}} onClick={() => UnfollowUser(data.user._id)}>Unfollow</button>
+                                    {window.innerWidth >= 460 ?
+                                        <div>
+                                            {
+                                                showfollow
+                                                    ? <button className='btn waves-effect waves-light blue darken-1 white-text' style={{ margin: '10px' }} onClick={() => FollowUser(data.user._id)}>Follow</button>
+                                                    : <button className='btn waves-effect waves-light white red-text' style={{ margin: '10px' }} onClick={() => UnfollowUser(data.user._id)}>Unfollow</button>
+                                            }
+                                        </div> :
+                                        <div>
+                                            {
+                                                showfollow
+                                                    ? <button className='btn waves-effect waves-light blue darken-1 white-text' style={{ margin: '10px' }} onClick={() => FollowUser(data.user._id)}><i className='material-icons'>person_add</i></button>
+                                                    : <button className='btn waves-effect waves-light white red-text' style={{ margin: '10px' }} onClick={() => UnfollowUser(data.user._id)}><i className='material-icons'>person</i></button>
+                                            }
+                                        </div>
                                     }
-                                    </div> :
-                                    <div>
-                                       {
-                                        showfollow
-                                        ? <button className='btn waves-effect waves-light blue darken-1 white-text' style={{margin:'10px'}}  onClick={() => FollowUser(data.user._id)}><i className='material-icons'>person_add</i></button>
-                                        : <button className='btn waves-effect waves-light white red-text'  style={{margin:'10px'}} onClick={() => UnfollowUser(data.user._id)}><i className='material-icons'>person</i></button>
-                                    } 
-                                    </div>
-                                    }
-                                    
+
                                 </div>
                             </div>
                         </div>
