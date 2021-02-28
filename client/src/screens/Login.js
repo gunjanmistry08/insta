@@ -2,10 +2,11 @@ import React, { useState, useContext } from 'react';
 import M from "materialize-css";
 import { useHistory } from 'react-router-dom';
 import { Usercontext } from "../App";
+import { Helmet } from "react-helmet";
 
 export default function Login() {
 
-    const {state,dispatch} = useContext(Usercontext)
+    const { state, dispatch } = useContext(Usercontext)
     const history = useHistory()
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
@@ -27,9 +28,9 @@ export default function Login() {
                 if (data.error) {
                     M.toast({ html: data.error, classes: 'red darken-2' })
                 } else {
-                    localStorage.setItem('jwt',data.token)
-                    localStorage.setItem('user',JSON.stringify(data.user))
-                    dispatch({type:"USER", payload:data.user})
+                    localStorage.setItem('jwt', data.token)
+                    localStorage.setItem('user', JSON.stringify(data.user))
+                    dispatch({ type: "USER", payload: data.user })
                     history.push('/')
                 }
             })
@@ -37,13 +38,18 @@ export default function Login() {
 
 
     return (
-        <div className='container'>
-            <div className='card' style={{width:'80%', margin:'100px auto'}} >
-                <h2 className='instagram'>Instagram</h2>
-                <input type='text' placeholder='Email..' onChange={(e) => setemail(e.target.value)} value={email} />
-                <input type='password' placeholder='Password' onChange={(e) => setpassword(e.target.value)} value={password} />
-                <button className='btn waves-effect waves-light ' onClick={()=>LoginHandler()}>Login</button>
+        <>
+            <Helmet>
+                <title>Insta8 | Login</title>
+            </Helmet>
+            <div className='container'>
+                <div className='card' style={{ width: '80%', margin: '100px auto' }} >
+                    <h2 className='instagram'>Instagram</h2>
+                    <input type='text' placeholder='Email..' onChange={(e) => setemail(e.target.value)} value={email} />
+                    <input type='password' placeholder='Password' onChange={(e) => setpassword(e.target.value)} value={password} />
+                    <button className='btn waves-effect waves-light ' onClick={() => LoginHandler()}>Login</button>
+                </div>
             </div>
-        </div>
+        </>
     )
 }

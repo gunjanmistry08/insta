@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useContext, useRef} from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import CreatePost from '../components/createPost';
 import { Usercontext } from "../App";
 import { useHistory, Link } from 'react-router-dom';
 import M from 'materialize-css';
 import Post from '../components/Post';
+import { Helmet } from "react-helmet";
 
 export default function Profile() {
 
@@ -110,9 +111,12 @@ export default function Profile() {
             })
             .catch(error => console.error(error))
     }
-    
+
     return (
         <div>
+            <Helmet>
+                <title>{state ? state.name : 'loading'}</title>
+            </Helmet>
             <div className='profile-header'>
                 <div>
                     <img
@@ -145,15 +149,15 @@ export default function Profile() {
                             <strong>{state ? state.following.length : 'loading'}</strong>
                             <p>following</p>
                         </div>
-                    <div className='btn waves-effect waves-light white black-text modal-trigger' style={{margin:'10px 0px'}} data-target='modal2'>
-                        <i className='material-icons'>group</i>
-                    </div>
-                    <button className='btn-small btn waves-effect waves-light' style={{margin:'10px 0px', background: 'linear-gradient(to right bottom,#F58529, #DD2A7B, #8134AF, #515BD4)' }} onClick={() => {
-                        localStorage.clear()
-                        dispatch({ type: "CLEAR" })
-                        histroy.push('/login')
+                        <div className='btn waves-effect waves-light white black-text modal-trigger' style={{ margin: '10px 0px' }} data-target='modal2'>
+                            <i className='material-icons'>group</i>
+                        </div>
+                        <button className='btn-small btn waves-effect waves-light' style={{ margin: '10px 0px', background: 'linear-gradient(to right bottom,#F58529, #DD2A7B, #8134AF, #515BD4)' }} onClick={() => {
+                            localStorage.clear()
+                            dispatch({ type: "CLEAR" })
+                            histroy.push('/login')
 
-                    }}>Logout
+                        }}>Logout
                         </button>
                     </div>
                     <div id="modal2" className="modal" ref={userfollow}>

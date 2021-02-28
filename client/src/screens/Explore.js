@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Usercontext } from "../App";
 import { Link } from 'react-router-dom';
 import Post from '../components/Post';
+import { Helmet } from "react-helmet";
 
 export default function Explore() {
     const [data, setdata] = useState([]);
@@ -26,12 +27,17 @@ export default function Explore() {
 
 
     return (
-        <div>
-            {data.map(post => {
-                return (
-                    <Post post={post} />
-                )
-            })}
-        </div>
+        <>
+            <Helmet>
+                <title>Insta8 | Explore</title>
+            </Helmet>
+            <div>
+                {data.map(post => {
+                    return (
+                        <Post post={post} />
+                    )
+                })}
+            </div>
+        </>
     )
 }
